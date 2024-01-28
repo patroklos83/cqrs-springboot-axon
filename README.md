@@ -2,7 +2,7 @@
 
 # Sample CQRS Pattern using Spring Boot version 3 and Axon Framework/Server
 
-An example of CQRS implementation using event-driven architecture, including event-sourcing using Axon Server and Framework.
+An example CQRS implementation using event-driven architecture. Including event-sourcing using Axon Server and Framework.
 
 
 ## Requirements
@@ -47,7 +47,7 @@ Step 1. Import project in the IDE
 
 Step 2. From root directory run command
 
-     docker compose -f docker-compose-dev up
+     docker compose -f docker-compose-dev.yml up
  
 Step 3. Clean and build the nested projects/springboot applications 
  
@@ -60,6 +60,12 @@ Step 5. Go to SpringBoot project [in IDE] and run com.patroclos.cqrs.CqrsApplica
 > ***************************************
 > *            CQRS service started             *
 > ***************************************
+
+## Initialize Axon Server
+
+Before starting to create events and using the spring boot server, Axon server needs to be initialized first !
+
+![enter image description here](/images/axon_server_setup.png)
 
 ## REST API URL
 
@@ -111,7 +117,7 @@ When all services are up and running, go to below URL
 
 ## QUERY APIs
 
-### QUERY APIs
+### Fetch Inventory Item latest State
 
 /inventory/{id}
 
@@ -119,6 +125,8 @@ This is the query service where the inventory item last state is being fetched f
 H2 database. A valuable advantage of CQRS is the ability to reconstruct this item at any given point in time  (as the example below). This API reconstructs the inventory item from the event-store commands up to the given date time !
 
 ![enter image description here](/images/item-specific-point-int-time.png)
+
+### List all the Inventory Item events
 
 /inventory/{id}/events
 
