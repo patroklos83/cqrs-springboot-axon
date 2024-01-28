@@ -23,7 +23,7 @@ public class InventoryItemCommandController {
         return this.inventoryItemCommandService.createInventoryItem(itemCreateDTO);
     }
 
-    @PutMapping(value = "/stockAdjustment/{id}")
+    @PutMapping(value = "/stockadjustment/{id}")
     public CompletableFuture<String> stockAdjustment(@PathVariable(value = "id") String id,
                                                           @RequestBody InventoryItemStockDTO inventoryItemStockDTO) {
         return this.inventoryItemCommandService.incrementInventoryItemStock(id, inventoryItemStockDTO);

@@ -61,11 +61,23 @@ Step 5. Go to SpringBoot project [in IDE] and run com.patroclos.cqrs.CqrsApplica
 > *            CQRS service started             *
 > ***************************************
 
-## Microservices REST API URLs
+## REST API URL
 
- - http://localhost:8080/order-service/swagger-ui/index.html#/   
+ - http://localhost:8080/swagger-ui/index.html#/  
 
-## Creating a successful Event
+## AXON Server  Console URL
+
+ - http://localhost:8024/#
+
+## H2 Database  Console URL
+
+> user/password and jdbc url can be found in application.yaml
+
+ - http://localhost:8080/h2-console/
+
+## Command APIs
+
+### Creating a successful 'create' Event
 
 When all services are up and running, go to below URL
 
@@ -82,28 +94,30 @@ Try creating an Inventory Create request with below sample JSON request
 
 ![enter image description here](/images/create.PNG)
 
-## Creating a Failed Event with Rollback
+## Creating a Stock Adjustment Event
 
 When all services are up and running, go to below URL
 
-http://localhost:8080/order-service/swagger-ui/index.html#/
-
-Try creating an Order with below sample JSON request
-Customer with Id = 2 has inciefficient funds to pay for the Order Item.
-This will result in a failed payment debit attempt. In continuation the Order will be updated from the event, as **CANCELLED**;
-
-/order/create
+/inventoryitems/stockadjustment
 
     {
-      "customerId": 2,
-      "itemId": "a9112c62-0206-4711-beaf-220c2d1bbfb0"
+      "stockAdjustment": 15,
+      "type": "Add"
     }
 
 
-![enter image description here](/images/notnoughfunds.PNG)
+![enter image description here](/images/stock-adjust.PNG)
 
-/order/all
 
-![enter image description here](/images/ordercancelled.PNG)
+## QUERY APIs
+
+### QUERY APIs
+
+/inventory/{id}
+
+This is the query service where the inventory item last state is being fetched from the
+H2 database. A valuable advantage of CQRS is the ability to reconstruct this item at any given point in time  (as the example below). This API reconstructs the inventory item from the event-store commands up to the given date time !
+
+![enter image description here](/images/item-specific-point-int-time.PNG)
 
 Fell free to grab a copy of this sample code, and play it yourself.
