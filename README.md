@@ -4,6 +4,9 @@
 
 An example CQRS implementation using event-driven architecture. Including event-sourcing using Axon Server and Framework.
 
+## What is CQRS
+
+CQRS stands for **Command and Query Responsibility Segregation**, a pattern that separates read and update operations for a data store.
 
 ## Requirements
 
@@ -22,6 +25,9 @@ For building and running the application you need:
 ## Case Study
 
 An Inventory Management system uses a microservice in the backend to execute and process Inventory requests [create new item / item stock adjustment]. When a new Item request is created it is being send as command to Axon Server for processing. All the commands stay in a queue until they are executed successfully.
+
+Due to the fact that the existing SQL database is having a lot of backpressure for READS and WRITES, we decided to split these operations using CQRS pattern. 
+Therefore, existing database will handle the incoming WRITE operations in a queue (event-store), eliminating backpressure and reducing  READ operations response time.
 
 ![enter image description here](/images/create.png)
 
