@@ -1,0 +1,38 @@
+version: '3.3'
+services:
+  axonserver:
+    image: axoniq/axonserver
+    hostname: axonserver
+    volumes:
+      - axonserver-data:/data
+      - axonserver-events:/eventdata
+      - axonserver-config:/config:ro
+    ports:
+      - '8024:8024'
+      - '8124:8124'
+      - '8224:8224'
+    networks:
+      - cqrs-axon    
+volumes:
+  axonserver-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PWD}/axonserverse/data
+  axonserver-events:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PWD}/axonserverse/events
+  axonserver-config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PWD}/axonserverse/config
+
+
+networks:
+  cqrs-axon:

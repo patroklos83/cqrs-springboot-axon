@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import com.patroclos.util.*;
 
 @Service
-//@AllArgsConstructor
 public class InventoryQueryService {
 	
 	@Autowired
@@ -76,7 +75,6 @@ public class InventoryQueryService {
 			
 			if (event instanceof InventoryItemCreatedEvent) {
 				InventoryItemCreatedEvent e = (InventoryItemCreatedEvent) event;
-				//item.setStock(0);
 				item.setName(e.getName());
 				item.setId(e.getId());
 				item.setStock(e.getInitialStock());
