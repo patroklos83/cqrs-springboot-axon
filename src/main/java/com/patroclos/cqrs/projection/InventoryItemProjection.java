@@ -53,15 +53,4 @@ public class InventoryItemProjection {
         inventoryQueryService.handleEventStockReplay(event, item);
         this.repository.save(item);
     }
-
-    @QueryHandler
-    public InventoryItem handle(FindInventoryItemQuery query) {
-        log.debug("Handling FindInventoryItemQuery query: {}", query);
-        if (query.getDateTime() != null) {
-        	InventoryItem item = inventoryQueryService.handle(query.getId().toString(), query.getDateTime());
-        	return item;
-        }
-        
-        return this.repository.findById(query.getId()).orElse(null);
-    }
 }

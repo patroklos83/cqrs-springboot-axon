@@ -6,12 +6,15 @@ import com.patroclos.cqrs.event.Event;
 import com.patroclos.cqrs.event.InventoryItemCreatedEvent;
 import com.patroclos.cqrs.event.InventoryItemStockAdjustmentEvent;
 import com.patroclos.cqrs.event.StockAdjustmentType;
+import com.patroclos.cqrs.projection.InventoryItemProjection;
 import com.patroclos.cqrs.query.FindInventoryItemQuery;
+import com.patroclos.cqrs.repository.InventoryItemRepository;
 
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.axonframework.messaging.Message;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
+import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,9 @@ import java.util.stream.Collectors;
 
 import com.patroclos.util.*;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class InventoryQueryService {
 	
@@ -33,6 +39,8 @@ public class InventoryQueryService {
 	private EventStore eventStore;	
 	@Autowired
 	private InventoryItemBO inventoryItemBO;
+    @Autowired
+    private InventoryItemRepository repository;
 
 	public CompletableFuture<InventoryItem> findById(String id, String date) {
 		LocalDateTime dateTime = null;
@@ -96,4 +104,15 @@ public class InventoryQueryService {
 			inventoryItemBO.removeStock(item, event.getStockAdjustment());
 		}
 	}
+	
+    @QueryHandler
+    public InventoryItem handle(FindInventoryItemQuery query) {
+        log.debug("Handling FindInventoryItemQuery query: {}", query);
+        if (query.getDateTime() != null) {
+        	InventoryItem item = handle(query.getId().toString(), query.getDateTime());
+        	return item;
+        }
+        
+        return this.repository.findById(query.getId()).orElse(null);
+    }
 }
